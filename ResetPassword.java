@@ -1,11 +1,11 @@
 import java.sql.*;
 import java.util.Scanner;
 
-public class Login {
+public class ResetPassword {
     static final String D_URL = "jdbc:mysql://localhost:3306/mycogdemo";
     static final String USER = "root";
     static final String PASS = "pass@word1";
-    static final String QUERY =  "select * from twiter where email=? AND password=?;";
+    static final String QUERY = "update twiter set password = ? where email = ?;";
 
     public static void main(String args []){
         try (Connection con = DriverManager.getConnection(D_URL, USER, PASS);
@@ -13,21 +13,19 @@ public class Login {
              PreparedStatement ps = con.prepareStatement(QUERY);){
 
             Scanner sc=new Scanner(System.in);
+            System.out.print("OLD PASSWORD: ");
+            String password1 = sc.nextLine();
+
+            System.out.print("NEW PASSWORD: ");
+            String password = sc.nextLine();
+
             System.out.print("EMAIL: ");
             String email = sc.nextLine();
 
-            System.out.print("PASSWORD: ");
-            String password = sc.nextLine();
-
-            ps.setString(1,email);
-            ps.setString(2,password);
-            ResultSet rs=ps.executeQuery();
-
-            if(rs.next()){
-                System.out.println("Login Success !!");
-            }else {
-                System.out.print("Login Failled.");
-            }
+            ps.setString(1,password);
+            ps.setString(2,email);
+            int c= ps.executeUpdate();
+            System.out.println("Password updated successfully.");
         }
         catch(SQLException e){
 
